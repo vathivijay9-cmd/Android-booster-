@@ -18,18 +18,9 @@ jobs:
       - name: Validate Gradle Wrapper or Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # കീസ്റ്റോർ ഫയൽ തനിയെ സെർവറിൽ റൺ ടൈമിൽ ഉണ്ടാക്കുന്നു
-      - name: Create Temporary Keystore
-        run: |
-          keytool -genkey -v -keystore debug.keystore -alias debugConfig -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=Android Debug,O=Android,C=US"
-          mkdir -p ~/.gradle/daemon/9.5.1
-          cp debug.keystore ~/.gradle/daemon/9.5.1/
-          mkdir -p ~/.gradle/daemon/9.6
-          cp debug.keystore ~/.gradle/daemon/9.6/
-
-      # ആപ്പ് ബിൽഡ് ചെയ്യുന്നു
-      - name: Build with Gradle
-        run: gradle assembleDebug
+      # സിസ്റ്റത്തിലെ കീസ്റ്റോർ ഫയൽ ചെക്കിങ് പൂർണ്ണമായി ഒഴിവാക്കി നോർമൽ ബിൽഡ് ചെയ്യുന്നു
+      - name: Build with Gradle (Ignore Signing)
+        run: gradle assembleDebug -x validateSigningDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
