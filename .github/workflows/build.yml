@@ -18,9 +18,14 @@ jobs:
       - name: Validate Gradle Wrapper or Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # സിസ്റ്റത്തിലെ കീസ്റ്റോർ ഫയൽ ചെക്കിങ് പൂർണ്ണമായി ഒഴിവാക്കി നോർമൽ ബിൽഡ് ചെയ്യുന്നു
-      - name: Build with Gradle (Ignore Signing)
-        run: gradle assembleDebug -x validateSigningDebug
+      # പ്രോജക്റ്റിന് ആവശ്യമായ കൃത്യമായ പേരിൽ ഒരു പുതിയ കീസ്റ്റോർ ഫയൽ ഉണ്ടാക്കുന്നു
+      - name: Generate Local Keystore File
+        run: |
+          keytool -genkey -v -keystore debug.keystore -alias debugConfig -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=Android Debug,O=Android,C=US"
+
+      # ഇനി ഒരു എററും ഇല്ലാതെ നോർമൽ ആയി ബിൽഡ് ചെയ്യുന്നു
+      - name: Build with Gradle
+        run: gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
