@@ -1,0 +1,30 @@
+name: Build APK
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Validate Gradle Wrapper or Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # പ്രോജക്റ്റിലെ എല്ലാ സൈനിങ് സെറ്റിങ്സും അവഗണിച്ച് അൺസൈൻഡ് APK ബിൽഡ് ചെയ്യുന്നു
+      - name: Build Unsigned APK
+        run: gradle assembleDebug -Pandroid.packageSigningConfigs=none
+
+      # ബിൽഡ് ആയ അൺസൈൻഡ് APK അപ്‌ലോഡ് ചെയ്യുന്നു
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/*unsigned.apk
