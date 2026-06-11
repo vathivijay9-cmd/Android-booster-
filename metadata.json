@@ -1,0 +1,6 @@
+{
+  "name": "VIVO T2x 5G Optimizer",
+  "description": "Hardware performance accelerator, touch gesture drag-up calibrator, and gameplay overlay panel for Free Fire & Free Fire Max on Vivo T2x 5G.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
